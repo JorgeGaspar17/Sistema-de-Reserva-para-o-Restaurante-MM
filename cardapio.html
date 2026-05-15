@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - Restaurante MM</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="cardapio.css">
+
+    <!-- Font Awesome (opcional para ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img class="img" src="menu/IMG-20260217-WA0002.jpg" alt="Restaurante MM">
+            <h1>Restaurante MM</h1>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+            </li>
+
+            <li>
+                <a href="cardapio.html">
+                    <i class="fas fa-utensils"></i> Cardápio
+                </a>
+            </li>
+
+            <li>
+                <a href="Sobre.html">
+                    <i class="fas fa-info-circle"></i> Sobre
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="menu-header">
+        <div class="header-text">
+            <h1>Cardápio do Restaurante MM</h1>
+            <p>Sabores que encantam, momentos que marcam.</p>
+        </div>
+
+        <img src="menu/moca_cropped.png" alt="Funcionária Restaurante MM">
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="menu-container">
+
+        <!-- PRATOS ADICIONADOS PELO GERENTE -->
+        <section class="menu-category">
+            <h2>Entradas</h2>
+
+            <div id="lista-pratos">
+                <!-- Os pratos serão carregados aqui -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SCRIPT -->
+    <script>
+        fetch("listar_pratos.php")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("lista-pratos").innerHTML = data;
+            })
+            .catch(error => {
+                document.getElementById("lista-pratos").innerHTML =
+                    "<p>Erro ao carregar os pratos.</p>";
+                console.error(error);
+            });
+    </script>
+    <script src="gerente.js"></script>
+</body>
+
+</html>

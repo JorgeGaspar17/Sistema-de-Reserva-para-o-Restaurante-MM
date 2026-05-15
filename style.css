@@ -1,0 +1,614 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* NAVBAR */
+nav {
+    height: 80px;
+    background-color: red;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 100;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.nav-scrolled {
+    background: rgba(255, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+nav h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    color: white;
+    font-weight: 700;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    color: red;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 30px;
+    background: white;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    transform: translateY(-2px);
+}
+
+/* BANNER PRINCIPAL */
+.imgfundo {
+    background:
+        linear-gradient(rgba(19, 18, 18, 0.7), rgba(22, 22, 22, 0.7)),
+        url('menu/IMG-20260217-WA0037.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px;
+}
+
+.fundo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.texto {
+    color: white;
+    max-width: 850px;
+    padding: 30px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+}
+
+.texto h2 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.texto h3 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+}
+
+.a {
+    display: inline-block;
+    padding: 14px 35px;
+    background: red;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 40px;
+    transition: 0.3s;
+}
+
+.a:hover {
+    transform: translateY(-3px);
+}
+
+/* CATEGORIAS */
+.categories {
+    padding: 70px 8%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    background: white;
+}
+
+.category-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    text-align: center;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+}
+
+.category-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.category-info {
+    padding: 25px;
+}
+
+.category-info h2 {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* GALERIA */
+.galeria-section {
+    padding: 70px 0;
+    background: red;
+    color: white;
+    text-align: center;
+}
+
+.galeria-section h1 {
+    font-size: 2.3rem;
+    margin-bottom: 10px;
+}
+
+.galeria-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+.comboio-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.comboio-faixa {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: rolar-infinito 30s linear infinite;
+}
+
+.comboio-faixa img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+@keyframes rolar-infinito {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(-50% - 10px));
+    }
+}
+
+/* FOOTER */
+footer {
+    background: #111;
+    color: #999;
+    padding: 70px 8% 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.footer-col h3 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.footer-col p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.9rem;
+}
+
+/* RESPONSIVO */
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+/* NOTEBOOKS MENORES */
+
+@media (max-width: 1200px){
+
+    .texto{
+        max-width: 700px;
+    }
+
+    .texto h2{
+        font-size: 3rem;
+    }
+
+    .texto h3{
+        font-size: 1.3rem;
+    }
+
+    .categories{
+        padding: 60px 5%;
+    }
+
+    footer{
+        padding: 60px 5% 30px;
+    }
+}
+
+/* TABLETS */
+
+@media (max-width: 992px){
+
+    nav{
+        padding: 0 4%;
+    }
+
+    nav h1{
+        font-size: 1.7rem;
+    }
+
+    .nav-links{
+        gap: 12px;
+    }
+
+    .nav-links a{
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+
+    .texto{
+        padding: 35px;
+        width: 90%;
+    }
+
+    .texto h2{
+        font-size: 2.7rem;
+    }
+
+    .texto h3{
+        font-size: 1.2rem;
+    }
+
+    .category-card img{
+        height: 220px;
+    }
+
+    .comboio-faixa img{
+        width: 240px;
+        height: 240px;
+    }
+
+    .footer-content{
+        gap: 30px;
+    }
+}
+
+/* TABLETS PEQUENOS */
+
+@media (max-width: 768px){
+
+    nav{
+        height: auto;
+        flex-direction: column;
+        justify-content: center;
+        padding: 15px 20px;
+    }
+
+    .logo-container{
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-links{
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .nav-links a{
+        width: auto;
+        text-align: center;
+    }
+
+    .imgfundo{
+        padding-top: 140px;
+        min-height: auto;
+        padding-bottom: 60px;
+    }
+
+    .texto{
+        width: 95%;
+        padding: 30px 20px;
+    }
+
+    .texto h2{
+        font-size: 2.3rem;
+        line-height: 1.2;
+    }
+
+    .texto h3{
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .a{
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .categories{
+        grid-template-columns: 1fr;
+        padding: 50px 20px;
+        gap: 25px;
+    }
+
+    .category-card{
+        width: 100%;
+    }
+
+    .category-card img{
+        height: 230px;
+    }
+
+    .category-info{
+        padding: 20px;
+    }
+
+    .galeria-section{
+        padding: 60px 0;
+    }
+
+    .galeria-section h1{
+        font-size: 2rem;
+    }
+
+    .galeria-section h2{
+        font-size: 1rem;
+        padding: 0 20px;
+    }
+
+    .comboio-faixa{
+        gap: 15px;
+    }
+
+    .comboio-faixa img{
+        width: 200px;
+        height: 200px;
+    }
+
+    footer{
+        padding: 60px 20px 25px;
+    }
+
+    .footer-content{
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .social-icons{
+        justify-content: center;
+    }
+}
+
+/* SMARTPHONES */
+
+@media (max-width: 576px){
+
+    body{
+        overflow-x: hidden;
+    }
+
+    nav{
+        padding: 15px;
+    }
+
+    .img{
+        width: 50px;
+        height: 50px;
+    }
+
+    nav h1{
+        font-size: 1.3rem;
+    }
+
+    .nav-links{
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-links li{
+        width: 100%;
+    }
+
+    .nav-links a{
+        display: block;
+        width: 100%;
+        font-size: 0.95rem;
+        padding: 12px;
+    }
+
+    .imgfundo{
+        padding-top: 180px;
+    }
+
+    .texto{
+        border-radius: 12px;
+    }
+
+    .texto h2{
+        font-size: 1.9rem;
+    }
+
+    .texto h3{
+        font-size: 0.95rem;
+    }
+
+    .a{
+        font-size: 0.95rem;
+        padding: 14px 20px;
+    }
+
+    .categories{
+        padding: 40px 15px;
+    }
+
+    .category-card img{
+        height: 200px;
+    }
+
+    .category-info h2{
+        font-size: 0.95rem;
+    }
+
+    .galeria-section h1{
+        font-size: 1.8rem;
+    }
+
+    .galeria-section h2{
+        font-size: 0.95rem;
+    }
+
+    .comboio-faixa img{
+        width: 170px;
+        height: 170px;
+        border-radius: 10px;
+    }
+
+    .footer-col h3{
+        font-size: 1.2rem;
+    }
+
+    .footer-col p{
+        font-size: 0.95rem;
+    }
+
+    .copyright{
+        font-size: 0.8rem;
+    }
+}
+
+/* SMARTPHONES MUITO PEQUENOS */
+
+@media (max-width: 360px){
+
+    .texto h2{
+        font-size: 1.6rem;
+    }
+
+    .texto h3{
+        font-size: 0.9rem;
+    }
+
+    .comboio-faixa img{
+        width: 150px;
+        height: 150px;
+    }
+
+    .nav-links a{
+        font-size: 0.9rem;
+    }
+
+    .a{
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        padding: 0 20px;
+        height: auto;
+        flex-direction: column;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .texto h2 {
+        font-size: 2.2rem;
+    }
+
+    .texto h3 {
+        font-size: 1.1rem;
+    }
+
+    .img {
+        width: 55px;
+        height: 55px;
+    }
+
+    nav h1 {
+        font-size: 1.4rem;
+    }
+}
