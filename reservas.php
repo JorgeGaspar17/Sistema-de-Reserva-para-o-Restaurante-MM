@@ -75,16 +75,13 @@ $stmt = $conn->prepare("
         hora_reserva,
         num_pessoa,
         mesa,
-        estado,
-        carrinho,
-        total
+        estado
     )
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
-
 $stmt->bind_param(
-    "ssssssisssd",
+    "ssssssiss",
     $codigo_reserva,
     $nome,
     $email,
@@ -93,9 +90,7 @@ $stmt->bind_param(
     $hora_reserva,
     $num_pessoa,
     $mesa,
-    $estado,
-    $carrinhoJson,
-    $total
+    $estado
 );
 /* =========================
    EXECUTAR
@@ -116,15 +111,12 @@ if ($stmt->execute()) {
         margin-top:50px;
         box-shadow:0 0 20px rgba(0,0,0,0.5);
     '>
-
         <h2 style='color:#28a745;'>
             Reserva feita com sucesso!
         </h2>
-
         <p>
             <strong>Código da reserva:</strong>
         </p>
-
         <h1 id='codigoReserva'
             style='
             color:#ff2b2b;
@@ -132,15 +124,11 @@ if ($stmt->execute()) {
             '>
             $codigo_reserva
         </h1>
-
         <p>
             Guarde este código para consultar sua reserva.
         </p>
-
         <br>
-
         <!-- BOTÃO COPIAR -->
-
         <button onclick='copiarCodigo()'
             style='
             padding:12px 18px;
@@ -176,13 +164,9 @@ if ($stmt->execute()) {
            color:white;
            text-decoration:underline;
            '>
-
            Voltar
-
         </a>
-
     </div>
-
     <script>
 
     function copiarCodigo() {
