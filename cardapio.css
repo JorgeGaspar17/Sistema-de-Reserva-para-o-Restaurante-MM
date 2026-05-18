@@ -22,7 +22,7 @@ body {
 /* NAVBAR */
 nav {
     height: 85px;
-    background: red;
+    background: linear-gradient(135deg, #ff0000, #ff0000);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -69,7 +69,7 @@ nav h1 {
 .nav-links a {
     text-decoration: none;
     background: white;
-    color: red;
+    color: rgb(255, 0, 0);
     padding: 10px 18px;
     border-radius: 30px;
     font-weight: 600;
@@ -83,10 +83,10 @@ nav h1 {
 
 /* HEADER */
 .menu-header {
-    margin-top: 85px;
-    padding: 70px 8%;
-    background: linear-gradient(135deg, #e60000, #ff2a2a);
-    color: white;
+    margin-top: 70px;
+    padding: 50px;
+    background: linear-gradient(135deg, #ff0000, #ff0000);
+    color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -95,8 +95,7 @@ nav h1 {
 }
 
 .menu-header img {
-    width: 220px;
-    max-width: 100%;
+    width: 200px;
     border-radius: 18px;
 }
 
@@ -118,21 +117,37 @@ nav h1 {
 }
 
 .menu-category {
-    margin-bottom: 50px;
+    margin-bottom: 50;
+}
+
+.menu-category h1 {
+    font-size: 2rem;
+    color: red;
+     display: flex;
+    -ms-flex-line-pack: distribute;
+    
 }
 
 .menu-category h2 {
+    display: flex;
+    -ms-flex-line-pack: distribute;
     font-size: 2rem;
     color: red;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid red;
+     
+}
+
+.menu-category h3 {
+    font-size: 2rem;
+    color: red;
+     display: flex;
+    -ms-flex-line-pack: distribute;
+
 }
 
 /* CARD DOS PRATOS */
 #lista-pratos {
     display: flex;
-    flex-direction: column;
+    -ms-flex-line-pack: distribute;
     gap: 25px;
 }
 

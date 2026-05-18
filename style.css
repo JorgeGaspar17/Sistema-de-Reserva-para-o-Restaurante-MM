@@ -10,7 +10,7 @@ body {
 /* NAVBAR */
 nav { 
     height: 70px;
-    background-color: rgb(255, 0, 0);
+    background: linear-gradient(135deg, #ff0000, #ff0000);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -171,7 +171,7 @@ nav h1 {
 /* GALERIA */
 .galeria-section {
     padding: 70px 0;
-    background: red;
+    background: linear-gradient(135deg, #ff0000, #eb0a0a);
     color: white;
     text-align: center;
 }

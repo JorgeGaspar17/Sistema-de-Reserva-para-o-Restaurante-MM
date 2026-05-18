@@ -157,7 +157,7 @@ content="width=device-width, initial-scale=1.0">
 <style>
 
 /* =========================
-   MAIN
+Estilizando Dashboard Reserva
 ========================= */
 
 .main{
@@ -173,12 +173,12 @@ content="width=device-width, initial-scale=1.0">
 }
 
 .topbar h1{
-    color:#111;
-    margin-bottom:5px;
+    color: #111;
+    margin: bottom 5px;
 }
 
 .subtitulo{
-    color:#666;
+    color: #666;
     font-size:14px;
 }
 
@@ -188,10 +188,10 @@ content="width=device-width, initial-scale=1.0">
 
 .table-box{
     width:100%;
-    overflow-x:auto;
-    background:white;
+    overflow-x: auto;
+    background: white;
     border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    box-shadow:1px 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 table{
@@ -201,8 +201,8 @@ table{
 }
 
 thead{
-    background:#111;
-    color:white;
+    background: #111;
+    color: #ffff;
 }
 
 th{
@@ -217,9 +217,6 @@ td{
     font-size:14px;
 }
 
-tr:hover{
-    background:#f9f9f9;
-}
 
 /* =========================
    STATUS
@@ -250,39 +247,38 @@ tr:hover{
 ========================= */
 
 .acoes{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
 }
 
 .btn{
-    padding:8px 12px;
-    border-radius:6px;
+    padding:6px 10px;
     text-decoration:none;
     color:white;
-    font-size:13px;
-    font-weight:bold;
-    transition:0.3s;
+    font-size:10px;
+    font-weight: bold;
+    transition:0.5s;
 }
 
 .btn:hover{
-    opacity:0.85;
+    opacity:0.90;
 }
 
 .aprovar{
-    background:#16a34a;
+    background: #16a34a;
 }
 
 .cancelar{
-    background:#f59e0b;
+    background: #f59e0b;
 }
 
 .editar{
-    background:#2563eb;
+    background: #0e7efd;
 }
 
 .excluir{
-    background:#dc2626;
+    background: #dc2626;
 }
 
 /* =========================
