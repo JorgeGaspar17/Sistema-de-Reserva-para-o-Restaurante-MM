@@ -86,7 +86,7 @@ nav h1 {
     margin-top: 70px;
     padding: 50px;
     background: linear-gradient(135deg, #ff0000, #ff0000);
-    color: rgb(255, 255, 255);
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,6 +210,155 @@ footer {
     margin-top: 30px;
     font-size: 14px;
 }
+
+.categoria-box{
+    margin-bottom:60px;
+}
+
+.categoria-box h2{
+    font-size:2rem;
+    color:red;
+    margin-bottom:25px;
+    border-left:6px solid red;
+    padding-left:15px;
+}
+
+.categoria-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+.menu-item{
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.menu-item:hover{
+    transform:translateY(-5px);
+}
+
+.item-image{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.item-details{
+    padding:20px;
+}
+
+.item-details h3{
+    margin-bottom:10px;
+    color:#111;
+}
+
+.item-price{
+    padding:20px;
+    font-size:1.3rem;
+    font-weight:bold;
+    color:red;
+}
+
+/* =====================================
+   CATEGORIAS
+===================================== */
+
+.categoria-section{
+    margin-bottom:60px;
+}
+
+.categoria-topo{
+    margin-bottom:25px;
+}
+
+.categoria-topo h2{
+    font-size:2rem;
+    color:#e60000;
+    border-left:6px solid #e60000;
+    padding-left:15px;
+    font-weight:700;
+}
+
+/* =====================================
+   GRID DOS PRATOS
+===================================== */
+
+.categoria-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+/* =====================================
+   CARD
+===================================== */
+
+.menu-item{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    transition:0.3s;
+    display:flex;
+    flex-direction:column;
+}
+
+.menu-item:hover{
+    transform:translateY(-5px);
+}
+
+.imagem-box{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+}
+
+.item-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.item-details{
+    padding:20px;
+}
+
+.item-details h3{
+    font-size:1.3rem;
+    margin-bottom:10px;
+    color:#111;
+}
+
+.item-details p{
+    color:#666;
+    line-height:1.5;
+    margin-bottom:15px;
+}
+
+.item-price{
+    color:#e60000;
+    font-size:1.2rem;
+    font-weight:bold;
+}
+
+/* =====================================
+   SEM PRATOS
+===================================== */
+
+.sem-pratos{
+    text-align:center;
+    padding:50px;
+    background:#fff;
+    border-radius:15px;
+}
+
+
 
 /* RESPONSIVO */
 @media (max-width: 768px) {

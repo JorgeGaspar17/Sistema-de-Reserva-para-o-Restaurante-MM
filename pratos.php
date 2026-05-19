@@ -30,6 +30,7 @@ if(isset($_POST['add_prato'])){
 
     $nome        = trim($_POST['nome']);
     $categoria   = trim($_POST['categoria']);
+    $subcategoria = trim($_POST['subcategoria']);
     $descricao   = trim($_POST['descricao']);
     $preco       = floatval($_POST['preco']);
     $quantidade  = intval($_POST['quantidade']);
@@ -69,15 +70,16 @@ if(isset($_POST['add_prato'])){
 
     $stmt = $conn->prepare("
         INSERT INTO pratos
-        (nome, categoria, descricao, preco, qtdprato, imagem)
+        (nome, categoria, subcategoria, descricao, preco, qtdprato, imagem)
 
-        VALUES (?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
 
     $stmt->bind_param(
-        "sssdis",
+        "ssssiis",
         $nome,
         $categoria,
+        $subcategoria,
         $descricao,
         $preco,
         $quantidade,
@@ -136,11 +138,6 @@ content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="dashboard.css">
 
-<style>
-
-
-</style>
-
 </head>
 
 <body>
@@ -181,6 +178,11 @@ content="width=device-width, initial-scale=1.0">
                 name="categoria"
                 placeholder="Categoria"
                 required>
+
+                <input type="text"
+name="subcategoria"
+placeholder="Subcategoria"
+required>
 
                 <input type="number"
                 step="0.01"
@@ -279,17 +281,33 @@ content="width=device-width, initial-scale=1.0">
 
                     </td>
 
-                    <td>
+                    <td class="acoes">
 
-                        <a href="?excluir=<?= $p['id'] ?>"
-                        class="btn excluir"
-                        onclick="return confirm('Excluir prato?')">
+    <button
+class="btn editar"
+onclick="abrirModal(
+'<?= $p['id'] ?>',
+'<?= htmlspecialchars($p['nome']) ?>',
+'<?= htmlspecialchars($p['categoria']) ?>',
+'<?= htmlspecialchars($p['subcategoria']) ?>',
+'<?= $p['preco'] ?>',
+'<?= $p['qtdprato'] ?>',
+'<?= htmlspecialchars($p['descricao']) ?>'
+)">
 
-                            Excluir
+Editar
 
-                        </a>
+</button>
 
-                    </td>
+    <a href="?excluir=<?= $p['id'] ?>"
+    class="btn excluir"
+    onclick="return confirm('Excluir prato?')">
+
+        Excluir
+
+    </a>
+
+</td>
 
                 </tr>
 
@@ -302,6 +320,88 @@ content="width=device-width, initial-scale=1.0">
     </div>
 
 </div>
+
+
+<div class="modal" id="modalEditar">
+
+    <div class="modal-content">
+
+        <span class="fechar">&times;</span>
+
+        <h2>Editar Prato</h2>
+
+        <form id="formEditar">
+
+            <input type="hidden" id="edit_id">
+
+            <input type="text"
+            id="edit_nome"
+            placeholder="Nome">
+
+            <input type="text"
+            id="edit_categoria"
+            placeholder="Categoria">
+
+            <input type="text"
+            id="edit_subcategoria"
+            placeholder="Subcategoria">
+
+            <input type="number"
+            id="edit_preco"
+            placeholder="Preço">
+
+            <input type="number"
+            id="edit_quantidade"
+            placeholder="Quantidade">
+
+            <textarea
+            id="edit_descricao"
+            placeholder="Descrição"></textarea>
+
+            <button type="submit">
+
+                Salvar Alterações
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const modal = document.getElementById("modalEditar");
+
+document.querySelector(".fechar").onclick = () => {
+    modal.style.display = "none";
+};
+
+function abrirModal(
+    id,
+    nome,
+    categoria,
+    subcategoria,
+    preco,
+    quantidade,
+    descricao
+){
+
+    modal.style.display = "block";
+
+    document.getElementById("edit_id").value = id;
+    document.getElementById("edit_nome").value = nome;
+    document.getElementById("edit_categoria").value = categoria;
+    document.getElementById("edit_subcategoria").value = subcategoria;
+    document.getElementById("edit_preco").value = preco;
+    document.getElementById("edit_quantidade").value = quantidade;
+    document.getElementById("edit_descricao").value = descricao;
+}
+
+</script>
+
 
 </body>
 </html>

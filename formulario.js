@@ -33,7 +33,7 @@ telefone.addEventListener("input", () => {
     .replace(/\D/g, "")
     .replace(/(\d{3})(\d)/, "$1 $2")
     .replace(/(\d{3})(\d)/, "$1 $2")
-    .replace(/(\d{3})(\d{1,3})$/, "$1-$2");
+    .replace(/(\d{3})(\d{3,3})$/, "$1-$2");
 
 });
 

@@ -488,5 +488,6 @@ new Chart(document.getElementById("graficoProdutividade"), {
 
 </script>
 <script src="dashboard.js"></script>
+<script src="formulario.js"></script>
 </body>
 </html>
