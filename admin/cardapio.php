@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Cardápio</title>
-<link rel="stylesheet" href="cardapio.css">
+<link rel="stylesheet" href="../assets/css/cardapio.css">
 </head>
 
 <body>

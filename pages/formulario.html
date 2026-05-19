@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservar Mesa</title>
-    <link rel="stylesheet" href="formulario.css">
+    <link rel="stylesheet" href="../assets/css/formulario.css">
 
     <style>
         form {
@@ -52,8 +52,8 @@
     <nav>
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
-            <li><a href="cardapio.html">Cardápio</a></li>
-            <li><a href="Sobre.html">Sobre</a></li>
+            <li><a href="../pages/cardapio.html">Cardápio</a></li>
+            <li><a href="../pages/sobre.html">Sobre</a></li>
         </ul>
     </nav>
 
@@ -62,7 +62,7 @@
         <h2>Reserva Agora</h2>
 
         <!-- FORM RESERVA -->
-        <form action="reservas.php" method="POST" id="formReserva">
+        <form action="../admin/reservas.php" method="POST" id="formReserva">
 
             <input type="text" name="nome" placeholder="Nome Completo" required>
 
@@ -103,7 +103,7 @@
         <!-- VER RESERVA -->
         <h2>Ver Reserva</h2>
 
-        <form action="ver_reserva.php" method="GET">
+        <form action="../admin/ver_reserva.php" method="GET">
 
             <input type="text" name="codigo_reserva" placeholder="Código da reserva" required>
 
@@ -114,9 +114,9 @@
             </div>
 
         </form>
-    <script src="formulario.js">
+    <script src="../javascript/formulario.js">
     </script>
-    <script src="gerente.js"></script>
+    <script src="../javascript/gerente.js"></script>
 </body>
 
 </html>

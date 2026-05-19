@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Estrutura para tabela `adimin`
 --
 
-CREATE TABLE `adimin` (
+CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
   `nome` varchar(45) NOT NULL DEFAULT 'Manuela Eusebio',
   `email` varchar(100) NOT NULL DEFAULT 'gerentemm1@gmail.com',
@@ -38,7 +38,7 @@ CREATE TABLE `adimin` (
 -- Despejando dados para a tabela `adimin`
 --
 
-INSERT INTO `adimin` (`id`, `nome`, `email`, `senha`) VALUES
+INSERT INTO `admin` (`id`, `nome`, `email`, `senha`) VALUES
 (1, 'Manuela Eusebio', 'gerentemm1@gmail.com', '$2y$10$yoK5WumgmYG87C8vS.bzVOK5SpjjGFciuZ0iI5o9I7q6k7Fa4JdVC');
 
 -- --------------------------------------------------------
@@ -113,7 +113,7 @@ INSERT INTO `reservas` (`id`, `nome`, `email`, `telefone`, `num_pessoa`, `data_r
 --
 -- Índices de tabela `adimin`
 --
-ALTER TABLE `adimin`
+ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -135,7 +135,7 @@ ALTER TABLE `reservas`
 --
 -- AUTO_INCREMENT de tabela `adimin`
 --
-ALTER TABLE `adimin`
+ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --

@@ -11,7 +11,7 @@ function showSection(sec) {
 
 // LOGOUT
 function logout() {
-    window.location.href = "gerente_login.html";
+    window.location.href = ".../pages/gerente_login.html";
 }
 
 // 🔥 CARREGAR RESERVAS DO PHP
