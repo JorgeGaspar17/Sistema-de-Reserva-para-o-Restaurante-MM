@@ -8,7 +8,7 @@
 body {
     height: 100vh;
     background: linear-gradient(rgba(32, 32, 32, 0.75), rgba(20, 20, 20, 0.85)),
-                url(menu/IMG-20260217-WA0037.jpg);
+                url(../img/menu/IMG-20260217-WA0037.jpg);
     background-size: cover;
     background-position: center;
 

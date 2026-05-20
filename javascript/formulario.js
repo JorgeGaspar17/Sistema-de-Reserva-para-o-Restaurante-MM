@@ -9,8 +9,8 @@ const formReserva = document.getElementById("formReserva");
 ========================= */
 
 const nome = document.querySelector('input[name="nome"]');
-const email = document.querySelector('input[name="email"]');
-const telefone = document.querySelector('input[name="telefone"]');
+const email_tel = document.querySelector('input[name="email_tel"]');
+//const telefone = document.querySelector('input[name="telefone"]');
 const dataReserva = document.querySelector('input[name="data_reserva"]');
 const horaReserva = document.querySelector('input[name="hora_reserva"]');
 const numPessoa = document.querySelector('input[name="num_pessoa"]');
@@ -29,7 +29,7 @@ dataReserva.min = hoje;
 
 telefone.addEventListener("input", () => {
 
-    telefone.value = telefone.value
+    telefone.value = email_tel.value
     .replace(/\D/g, "")
     .replace(/(\d{3})(\d)/, "$1 $2")
     .replace(/(\d{3})(\d)/, "$1 $2")
@@ -48,8 +48,8 @@ formReserva.addEventListener("submit", function(event){
 
     /* PEGAR VALORES */
     const nomeValue = nome.value.trim();
-    const emailValue = email.value.trim();
-    const telefoneValue = telefone.value.trim();
+    const emaol_telValue = email_tel.value.trim();
+    //const telefoneValue = telefone.value.trim();
     const dataValue = dataReserva.value;
     const horaValue = horaReserva.value;
     const pessoasValue = parseInt(numPessoa.value);
@@ -71,35 +71,47 @@ formReserva.addEventListener("submit", function(event){
     }
 
     /* =========================
-       VALIDAR EMAIL
+       VALIDAR CONTATO
     ========================= */
 
-    const emailRegex =
+    const email_telRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if(!emailRegex.test(emailValue)){
+    const email_telDigits = email_telValue.replace(/\D/g, "");
+    const isEmailValid = email_telValue === "" ? false : email_telRegex.test(email_telValue);
+    const isPhoneValid = email_telDigits.length >= 9;
 
+    if(!isEmailValid && !isPhoneValid){
+
+        mostrarMensagem(
+            "Informe um e-mail ou telefone válido.",
+            "erro"
+        );
+
+        if(!isEmailValid){
+            email_tel.focus();
+        }
+        return;
+    }
+
+    if(emailValue !== "" && !isEmailValid){
         mostrarMensagem(
             "Digite um e-mail válido.",
             "erro"
         );
 
-        email.focus();
+        email_tel.focus();
         return;
     }
 
-    /* =========================
-       VALIDAR TELEFONE
-    ========================= */
-
-    if(telefoneValue.length < 9){
+    if(emaol_telValue !== "" && !isPhoneValid){
 
         mostrarMensagem(
             "Digite um telefone válido.",
             "erro"
         );
 
-        telefone.focus();
+        email_tel.focus();
         return;
     }
 

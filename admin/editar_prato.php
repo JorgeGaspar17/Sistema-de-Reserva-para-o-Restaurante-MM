@@ -1,14 +1,5 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: gerente_login.html");
-    exit();
-}
-
-$conn = new mysqli("localhost", "root", "", "restaurante");
-
-$conn->set_charset("utf8mb4");
+require_once __DIR__ . '/../includes/admin_init.php';
 
 $id = intval($_GET['id']);
 
@@ -25,12 +16,16 @@ $result = $stmt->get_result();
 $prato = $result->fetch_assoc();
 
 if(isset($_POST['editar'])){
+    if (!verify_csrf($_POST['csrf_token'] ?? '')) {
+        header('Location: pratos.php');
+        exit();
+    }
 
-    $nome       = $_POST['nome'];
-    $categoria  = $_POST['categoria'];
-    $descricao  = $_POST['descricao'];
-    $preco      = $_POST['preco'];
-    $quantidade = $_POST['quantidade'];
+    $nome       = trim($_POST['nome'] ?? '');
+    $categoria  = trim($_POST['categoria'] ?? '');
+    $descricao  = trim($_POST['descricao'] ?? '');
+    $preco      = floatval($_POST['preco'] ?? 0);
+    $quantidade = intval($_POST['quantidade'] ?? 0);
 
     $stmt = $conn->prepare("
         UPDATE pratos
@@ -44,7 +39,7 @@ if(isset($_POST['editar'])){
     ");
 
     $stmt->bind_param(
-        "sssdis",
+        "sssdii",
         $nome,
         $categoria,
         $descricao,
@@ -67,6 +62,7 @@ if(isset($_POST['editar'])){
 <title>Editar Prato</title>
 
 <link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 
@@ -112,11 +108,12 @@ if(isset($_POST['editar'])){
 <h1>Editar Prato</h1>
 
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
-<input type="text"
-name="nome"
-value="<?= htmlspecialchars($prato['nome']) ?>"
-required>
+    <input type="text"
+    name="nome"
+    value="<?= htmlspecialchars($prato['nome']) ?>"
+    required>
 
 <input type="text"
 name="categoria"

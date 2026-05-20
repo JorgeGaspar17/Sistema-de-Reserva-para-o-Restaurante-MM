@@ -1,26 +1,5 @@
 <?php
-session_start();
-
-/* =====================================
-   PROTEGER DASHBOARD
-===================================== */
-
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: gerente_login.html");
-    exit();
-}
-
-/* =====================================
-   CONEXÃO
-===================================== */
-
-$conn = new mysqli("localhost", "root", "", "restaurante");
-
-if ($conn->connect_error) {
-    die("Erro de conexão.");
-}
-
-$conn->set_charset("utf8mb4");
+require_once __DIR__ . '/../includes/admin_init.php';
 
 /* =====================================
    FUNÇÃO TOTAL
@@ -120,9 +99,8 @@ content="width=device-width, initial-scale=1.0">
 
 <title>Dashboard</title>
 
-<link rel="stylesheet" href="dashboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 
@@ -212,6 +190,7 @@ content="width=device-width, initial-scale=1.0">
     padding:20px;
     border-radius:10px;
     box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    min-height:460px;
 }
 
 .grafico-box h2{
@@ -220,7 +199,8 @@ content="width=device-width, initial-scale=1.0">
 }
 
 canvas{
-    max-height:300px;
+    width:100%;
+    max-height:360px;
 }
 
 /* =====================================
@@ -271,12 +251,19 @@ canvas{
 
 <body>
 
-<?php include "sidebar.php"; ?>
+<?php include __DIR__ . '/../includes/sidebar.php'; ?>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="main">
 
     <!-- TOPO -->
     <div class="topbar">
+
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
         <div>
 
@@ -385,105 +372,143 @@ canvas{
 
 <script>
 
-/* =====================================
-   AUTO ATUALIZAÇÃO
-===================================== */
+const chartData = {
+    statusLabels: ['Aprovadas', 'Pendentes', 'Canceladas'],
+    statusValues: [<?= $aprovadas ?>, <?= $pendentes ?>, <?= $canceladas ?>],
+    statusColors: ['#16a34a', '#f59e0b', '#dc2626'],
+    productivityLabels: ['Hoje', 'Mês', 'Ano'],
+    productivityValues: [<?= $reservas_hoje ?>, <?= $reservas_mes ?>, <?= $reservas_ano ?>]
+};
 
-setTimeout(() => {
+function drawBarChart(canvas, labels, values, colors) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.clientWidth;
+    const height = 280;
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    ctx.clearRect(0, 0, width, height);
 
-    location.reload();
+    const padding = 40;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+    const max = Math.max(...values, 1);
 
-}, 60000);
+    ctx.fillStyle = '#f4f4f4';
+    ctx.fillRect(padding, padding, chartWidth, chartHeight);
 
-/* =====================================
-   STATUS RESERVAS
-===================================== */
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 5; i++) {
+        const y = padding + (chartHeight / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(padding + chartWidth, y);
+        ctx.stroke();
+    }
 
-new Chart(document.getElementById("graficoStatus"), {
+    const barWidth = chartWidth / values.length * 0.6;
+    values.forEach((value, index) => {
+        const barHeight = (value / max) * (chartHeight - 20);
+        const x = padding + index * (chartWidth / values.length) + (chartWidth / values.length - barWidth) / 2;
+        const y = padding + chartHeight - barHeight;
 
-    type: "bar",
+        ctx.fillStyle = colors[index] || '#333';
+        ctx.fillRect(x, y, barWidth, barHeight);
 
-    data: {
+        ctx.fillStyle = '#111';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(value, x + barWidth / 2, y - 10);
+        ctx.fillText(labels[index], x + barWidth / 2, padding + chartHeight + 20);
+    });
+}
 
-        labels: [
-            "Aprovadas",
-            "Pendentes",
-            "Canceladas"
-        ],
+function drawLineChart(canvas, labels, values, color) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.clientWidth;
+    const height = 280;
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    ctx.clearRect(0, 0, width, height);
 
-        datasets: [{
+    const padding = 40;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+    const max = Math.max(...values, 1);
 
-            data: [
-                <?= $aprovadas ?>,
-                <?= $pendentes ?>,
-                <?= $canceladas ?>
-            ],
+    ctx.fillStyle = '#f4f4f4';
+    ctx.fillRect(padding, padding, chartWidth, chartHeight);
 
-            backgroundColor: [
-                "#16a34a",
-                "#f59e0b",
-                "#dc2626"
-            ],
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 5; i++) {
+        const y = padding + (chartHeight / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(padding + chartWidth, y);
+        ctx.stroke();
+    }
 
-            borderRadius:5
-
-        }]
-    },
-
-    options: {
-
-        responsive:true,
-
-        plugins:{
-            legend:{
-                display:false
-            }
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    values.forEach((value, index) => {
+        const x = padding + (chartWidth * index) / (values.length - 1);
+        const y = padding + chartHeight - (value / max) * (chartHeight - 20);
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
         }
+    });
+    ctx.stroke();
+
+    ctx.fillStyle = color;
+    values.forEach((value, index) => {
+        const x = padding + (chartWidth * index) / (values.length - 1);
+        const y = padding + chartHeight - (value / max) * (chartHeight - 20);
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillText(labels[index], x, padding + chartHeight + 18);
+    });
+}
+
+function renderDashboardCharts() {
+    drawBarChart(document.getElementById('graficoStatus'), chartData.statusLabels, chartData.statusValues, chartData.statusColors);
+    drawLineChart(document.getElementById('graficoProdutividade'), chartData.productivityLabels, chartData.productivityValues, '#d62828');
+}
+
+window.addEventListener('load', renderDashboardCharts);
+window.addEventListener('resize', renderDashboardCharts);
+
+const sidebar = document.querySelector('.sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function toggleSidebar(){
+    const isOpen = sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('visible', isOpen);
+    sidebar.classList.toggle('closed', !isOpen);
+}
+
+function closeSidebar(){
+    sidebar.classList.remove('open');
+    sidebar.classList.add('closed');
+    sidebarOverlay.classList.remove('visible');
+}
+
+sidebarToggle.addEventListener('click', toggleSidebar);
+sidebarOverlay.addEventListener('click', closeSidebar);
+window.addEventListener('resize', () => {
+    if(window.innerWidth > 1024){
+        sidebar.classList.remove('closed', 'open');
+        sidebarOverlay.classList.remove('visible');
     }
-
-});
-
-/* =====================================
-   PRODUTIVIDADE
-===================================== */
-
-new Chart(document.getElementById("graficoProdutividade"), {
-
-    type: "line",
-
-    data: {
-
-        labels: [
-            "Hoje",
-            "Mês",
-            "Ano"
-        ],
-
-        datasets: [{
-
-            label:"Reservas",
-
-            data: [
-                <?= $reservas_hoje ?>,
-                <?= $reservas_mes ?>,
-                <?= $reservas_ano ?>
-            ],
-
-            borderColor:"#d62828",
-
-            backgroundColor:"rgba(214,40,40,0.08)",
-
-            fill:true,
-
-            tension:0.3
-
-        }]
-    },
-
-    options:{
-        responsive:true
-    }
-
 });
 
 </script>

@@ -4,7 +4,7 @@
    CONEXÃO
 ========================= */
 
-include("restaurante.php");
+require_once __DIR__ . '/../restaurante.php';
 
 /* =========================
    HEADER JSON

@@ -1,22 +1,20 @@
 <?php
 
-$conn = new mysqli("localhost", "root", "", "restaurante");
+require_once __DIR__ . '/../config/conexao.php';
 
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
+header('Content-Type: text/html; charset=utf-8');
 
-$conn->set_charset("utf8mb4");
+$uploadUrl = dirname(dirname($_SERVER['SCRIPT_NAME'])) . '/uploads/';
 
 /* =====================================
    BUSCAR CATEGORIAS
 ===================================== */
 
-$categorias = $conn->query("
-    SELECT DISTINCT categoria
-    FROM pratos
-    ORDER BY categoria ASC
-");
+$categoriasStmt = $conn->prepare(
+    "SELECT DISTINCT categoria FROM pratos ORDER BY categoria ASC"
+);
+$categoriasStmt->execute();
+$categorias = $categoriasStmt->get_result();
 
 /* =====================================
    MOSTRAR CADA CATEGORIA
@@ -70,8 +68,10 @@ if($categorias->num_rows > 0){
                 <div class="imagem-box">
 
                     <img
-                    src="uploads/<?php echo htmlspecialchars($row['imagem']); ?>"
-                    class="item-image">
+                    src="<?= htmlspecialchars($uploadUrl . $row['imagem'], ENT_QUOTES, 'UTF-8') ?>"
+                    class="item-image"
+                    alt="<?= htmlspecialchars($row['nome'], ENT_QUOTES, 'UTF-8') ?>"
+                    onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'220\' viewBox=\'0 0 320 220\'%3E%3Crect width=\'320\' height=\'220\' fill=\'%23f3f3f3\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23666\' font-size=\'18\' font-family=\'Arial, sans-serif\'%3EImagem indisponível%3C/text%3E%3C/svg%3E';">
 
                 </div>
 

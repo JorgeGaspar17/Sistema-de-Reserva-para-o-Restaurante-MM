@@ -1,8 +1,12 @@
 <?php
 session_start();
 
-include("conexao.php");
-include("restaurante.php");
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/gerente_login.php');
+    exit();
+}
+
+require_once __DIR__ . '/../config/conexao.php';
 
 /* =========================
    RECEBER DADOS
@@ -11,17 +15,24 @@ include("restaurante.php");
 $nome  = trim($_POST['nome'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $senha = trim($_POST['senha'] ?? '');
+$csrf  = $_POST['csrf_token'] ?? '';
 
 /* =========================
    VALIDAR CAMPOS
 ========================= */
 
 if (empty($nome) || empty($email) || empty($senha)) {
+    header('Location: ../pages/gerente_login.php?error=empty');
+    exit();
+}
 
-    echo "<script>
-            alert('Preencha todos os campos!');
-            window.location.href='gerente_login.html';
-          </script>";
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    header('Location: ../pages/gerente_login.php?error=invalid_email');
+    exit();
+}
+
+if (empty($csrf) || !hash_equals($_SESSION['token'] ?? '', $csrf)) {
+    header('Location: ../pages/gerente_login.php?error=csrf');
     exit();
 }
 
@@ -69,19 +80,13 @@ if ($resultado->num_rows > 0) {
         exit();
 
     } else {
-
-        echo "<script>
-                alert('Senha incorreta!');
-                window.location.href='gerente_login.html';
-              </script>";
+        header('Location: ../pages/gerente_login.php?error=credentials');
+        exit();
     }
 
 } else {
-
-    echo "<script>
-            alert('Administrador não encontrado!');
-            window.location.href='gerente_login.html';
-          </script>";
+    header('Location: ../pages/gerente_login.php?error=credentials');
+    exit();
 }
 
 $stmt->close();

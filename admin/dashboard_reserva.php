@@ -6,7 +6,7 @@ session_start();
 ========================= */
 
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: gerente_login.html");
+    header("Location: ../pages/gerente_login.html");
     exit();
 }
 
@@ -21,6 +21,44 @@ if ($conn->connect_error) {
 }
 
 $conn->set_charset("utf8mb4");
+
+// garantir token CSRF para ações administrativas
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Tratar ações via POST (mais seguro)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $posted = $_POST['csrf_token'] ?? '';
+    if (empty($posted) || !hash_equals($_SESSION['csrf_token'], $posted)) {
+        header('HTTP/1.1 400 Bad Request');
+        die('Token CSRF inválido');
+    }
+
+    if (isset($_POST['aprovar'])) {
+        $id = intval($_POST['aprovar']);
+        $stmt = $conn->prepare("UPDATE reservas SET estado='Aprovada' WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        header("Location: dashboard_reserva.php"); exit();
+    }
+
+    if (isset($_POST['cancelar'])) {
+        $id = intval($_POST['cancelar']);
+        $stmt = $conn->prepare("UPDATE reservas SET estado='Cancelada' WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        header("Location: dashboard_reserva.php"); exit();
+    }
+
+    if (isset($_POST['excluir'])) {
+        $id = intval($_POST['excluir']);
+        $stmt = $conn->prepare("DELETE FROM reservas WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        header("Location: dashboard_reserva.php"); exit();
+    }
+}
 
 /* =========================
    APROVAR
@@ -152,7 +190,7 @@ content="width=device-width, initial-scale=1.0">
 
 <title>Reservas</title>
 
-<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="../assets/css/dashboard.css">
 
 <style>
 
@@ -393,17 +431,26 @@ td{
 
 <body>
 
-<?php include "sidebar.php"; ?>
+<?php include "../includes/sidebar.php"; ?>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="main">
 
     <div class="topbar">
 
-        <h1>Gestão de Reservas</h1>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-        <span class="subtitulo">
-            Controle e edição das reservas do restaurante
-        </span>
+        <div>
+            <h1>Gestão de Reservas</h1>
+
+            <span class="subtitulo">
+                Controle e edição das reservas do restaurante
+            </span>
+        </div>
 
     </div>
 
@@ -452,56 +499,55 @@ td{
 
                     <td><?= htmlspecialchars($r['telefone']) ?></td>
 
-                    <td><?= $r['num_pessoa'] ?></td>
+                    <td><?= htmlspecialchars($r['num_pessoa']) ?></td>
 
                     <td><?= htmlspecialchars($r['mesa']) ?></td>
 
-                    <td><?= $r['data_reserva'] ?></td>
+                    <td><?= htmlspecialchars($r['data_reserva']) ?></td>
 
-                    <td><?= $r['hora_reserva'] ?></td>
+                    <td><?= htmlspecialchars($r['hora_reserva']) ?></td>
 
                     <td>
                         <span class="status <?= $classe ?>">
-                            <?= $r['estado'] ?>
+                            <?= htmlspecialchars($r['estado']) ?>
                         </span>
                     </td>
 
                     <td class="acoes">
 
-                        <a href="?aprovar=<?= $r['id'] ?>"
-                        class="btn aprovar">
-                            Aprovar
-                        </a>
+                        <form method="POST" style="display:inline-block;margin:0">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            <button type="submit" name="aprovar" value="<?= $r['id'] ?>" class="btn aprovar" title="Aprovar" aria-label="Aprovar">
+                                <span class="icon"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                        </form>
 
-                        <a href="?cancelar=<?= $r['id'] ?>"
-                        class="btn cancelar">
-                            Cancelar
-                        </a>
+                        <form method="POST" style="display:inline-block;margin:0">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            <button type="submit" name="cancelar" value="<?= $r['id'] ?>" class="btn cancelar" title="Cancelar" aria-label="Cancelar">
+                                <span class="icon"><i class="fa-solid fa-xmark"></i></span>
+                            </button>
+                        </form>
 
-                        <button
-                        class="btn editar"
-                        onclick="abrirModal(
+                        <button class="btn editar" title="Editar reserva" aria-label="Editar reserva" onclick="abrirModal(
                             '<?= $r['id'] ?>',
                             '<?= htmlspecialchars($r['nome'], ENT_QUOTES) ?>',
                             '<?= htmlspecialchars($r['telefone'], ENT_QUOTES) ?>',
-                            '<?= $r['num_pessoa'] ?>',
+                            '<?= htmlspecialchars($r['num_pessoa'], ENT_QUOTES) ?>',
                             '<?= htmlspecialchars($r['mesa'], ENT_QUOTES) ?>',
-                            '<?= $r['data_reserva'] ?>',
-                            '<?= $r['hora_reserva'] ?>',
-                            '<?= $r['estado'] ?>'
+                            '<?=htmlspecialchars($r['data_reserva']) ?>',
+                            '<?= htmlspecialchars($r['hora_reserva']) ?>',
+                            '<?=htmlspecialchars($r['estado']) ?>'
                         )">
-
-                            Editar
-
+                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
                         </button>
 
-                        <a href="?excluir=<?= $r['id'] ?>"
-                        class="btn excluir"
-                        onclick="return confirm('Deseja excluir esta reserva?')">
-
-                            Excluir
-
-                        </a>
+                        <form method="POST" style="display:inline-block;margin:0" onsubmit="return confirm('Deseja excluir esta reserva?');">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            <button type="submit" name="excluir" value="<?= $r['id'] ?>" class="btn excluir" title="Excluir" aria-label="Excluir">
+                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
+                            </button>
+                        </form>
 
                     </td>
 
@@ -636,6 +682,37 @@ function fecharModal(){
     document.getElementById("modalEditar").style.display = "none";
 }
 
+</script>
+
+<script>
+const sidebar = document.querySelector('.sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function toggleSidebar(){
+    const isOpen = sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('visible', isOpen);
+    sidebar.classList.toggle('closed', !isOpen);
+}
+
+function closeSidebar(){
+    sidebar.classList.remove('open');
+    sidebar.classList.add('closed');
+    sidebarOverlay.classList.remove('visible');
+}
+
+if(sidebarToggle){
+    sidebarToggle.addEventListener('click', toggleSidebar);
+}
+if(sidebarOverlay){
+    sidebarOverlay.addEventListener('click', closeSidebar);
+}
+window.addEventListener('resize', () => {
+    if(window.innerWidth > 1024){
+        sidebar.classList.remove('closed', 'open');
+        sidebarOverlay.classList.remove('visible');
+    }
+});
 </script>
 
 </body>

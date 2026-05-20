@@ -10,7 +10,7 @@ document.addEventListener("keydown", function (e) {
     buffer += e.key.toLowerCase();
 
     if (buffer.includes(segredo)) {
-        window.location.href = "gerente_login.html";
+        window.location.href = "gerente_login.php";
     }
 
     setTimeout(() => {

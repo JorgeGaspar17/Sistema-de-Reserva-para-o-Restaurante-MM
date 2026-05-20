@@ -7,10 +7,8 @@
     <title>Sobre - Restaurante MM</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="sobre.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/sobre.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -18,24 +16,26 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="logo-container">
-            <img class="img" src="menu/IMG-20260217-WA0002.jpg" alt="Restaurante MM">
+            <img class="img" src="../img/menu/IMG-20260217-WA0002.jpg" alt="Restaurante MM">
             <h1>Restaurante MM</h1>
         </div>
 
         <ul class="nav-links">
             <li>
-            <a href="logout.php">Início</a>
-            </li>
-
-            <li>
-                <a href="cardapio.html">
-                    <i class="fas fa-utensils"></i> Cardápio
+                <a href="logout.php">
+                    <span class="nav-icon"><i class="fa-solid fa-house"></i></span> Início
                 </a>
             </li>
 
             <li>
-                <a href="Sobre.html">
-                    <i class="fas fa-info-circle"></i> Sobre
+                <a href="../pages/cardapio.html">
+                    <span class="nav-icon"><i class="fa-solid fa-utensils"></i></span> Cardápio
+                </a>
+            </li>
+
+            <li>
+                <a href="../pages/sobre.html">
+                    <span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> Sobre
                 </a>
             </li>
         </ul>
@@ -67,20 +67,19 @@
                     reuniões de negócios e celebrações memoráveis.
                 </p>
 
-                <a href="formulario.html" class="btn-reserva">
-                    <i class="fas fa-calendar-check"></i>
-                    Fazer Reserva
+                <a href="../pages/formulario.php" class="btn-reserva">
+                    <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span> Fazer Reserva
                 </a>
             </div>
 
             <div class="sobre-imagem">
-                <img src="galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg" alt="Restaurante MM">
+                <img src="../img/galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg" alt="Restaurante MM">
             </div>
 
         </div>
 
     </section>
-    <script src="gerente.js"></script>
+    <script src="../javascript/gerente.js"></script>
 </body>
 
 </html>

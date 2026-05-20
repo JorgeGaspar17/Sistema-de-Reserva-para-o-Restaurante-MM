@@ -1,5 +1,25 @@
 <?php
-include ("restaurante.php");
+include ("../s_reserva/restaurante.php");
+// garantir sessão para token CSRF
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+// honeypot anti-bot
+$hp = $_POST['hp'] ?? '';
+if (!empty($hp)) {
+    // provavel bot
+    http_response_code(400);
+    die('Requisição inválida.');
+}
+
+// verificar token CSRF
+$posted_token = $_POST['csrf_token'] ?? '';
+if (empty($posted_token) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $posted_token)) {
+    echo "<div style='max-width:600px;margin:40px auto;padding:20px;border-radius:12px;background:#ffcdd2;color:#560000;font-family:Arial;'>";
+    echo "<h3>Erro de segurança: token inválido.</h3>";
+    echo "<p><a href='../pages/formulario.php' style='color:#000;text-decoration:underline;'>Voltar ao formulário</a></p>";
+    echo "</div>";
+    exit();
+}
 
 /* =========================
    RECEBER DADOS
@@ -14,6 +34,47 @@ $hora_reserva = $_POST['hora_reserva'] ?? '';
 $num_pessoa = $_POST['num_pessoa'] ?? '';
 $mesa = $_POST['mesa'] ?? '';
 //$token = $_POST['token'] ?? '';
+
+/* =========================
+   VALIDAÇÃO SERVER-SIDE (EMAIL OU TELEFONE)
+========================= */
+
+$nome = trim($nome);
+$email = trim($email);
+$telefone = trim($telefone);
+
+// Normalizar telefone para apenas dígitos para validação/armazenamento
+$telefone_digits = preg_replace('/\D+/', '', $telefone);
+
+$hasEmail = $email !== '';
+$hasPhone = $telefone_digits !== '';
+
+if (!$hasEmail && !$hasPhone) {
+    echo "<div style='max-width:600px;margin:40px auto;padding:20px;border-radius:12px;background:#ffcdd2;color:#560000;font-family:Arial;'>";
+    echo "<h3>Erro: Informe um e-mail ou telefone para contato.</h3>";
+    echo "<p><a href='../pages/formulario.php' style='color:#000;text-decoration:underline;'>Voltar ao formulário</a></p>";
+    echo "</div>";
+    exit();
+}
+
+if ($hasEmail && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo "<div style='max-width:600px;margin:40px auto;padding:20px;border-radius:12px;background:#ffcdd2;color:#560000;font-family:Arial;'>";
+    echo "<h3>Erro: E-mail inválido.</h3>";
+    echo "<p><a href='../pages/formulario.php' style='color:#000;text-decoration:underline;'>Voltar ao formulário</a></p>";
+    echo "</div>";
+    exit();
+}
+
+if ($hasPhone && strlen($telefone_digits) < 9) {
+    echo "<div style='max-width:600px;margin:40px auto;padding:20px;border-radius:12px;background:#ffcdd2;color:#560000;font-family:Arial;'>";
+    echo "<h3>Erro: Telefone inválido. Informe pelo menos 9 dígitos.</h3>";
+    echo "<p><a href='../pages/formulario.php' style='color:#000;text-decoration:underline;'>Voltar ao formulário</a></p>";
+    echo "</div>";
+    exit();
+}
+
+// Use a versão apenas com dígitos para salvar
+$telefone = $telefone_digits;
 
 /* =========================
    VERIFICAR DISPONIBILIDADE
@@ -159,13 +220,13 @@ if ($stmt->execute()) {
 
         <br><br>
 
-        <a href='formulario.html'
-           style='
-           color:white;
-           text-decoration:underline;
-           '>
-           Voltar
-        </a>
+        <a href='../pages/formulario.php'
+               style='
+               color:white;
+               text-decoration:underline;
+               '>
+               Voltar
+            </a>
     </div>
     <script>
 
@@ -205,6 +266,6 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <script src="formulario.js"></script>
+    <script src="../javascript/formulario.js"></script>
 </body>
 </html>
