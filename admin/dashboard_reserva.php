@@ -1,36 +1,10 @@
 <?php
-session_start();
-
-/* =========================
-   PROTEGER DASHBOARD
-========================= */
-
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: ../pages/gerente_login.html");
-    exit();
-}
-
-/* =========================
-   CONEXÃO
-========================= */
-
-$conn = new mysqli("localhost", "root", "", "restaurante");
-
-if ($conn->connect_error) {
-    die("Erro de conexão.");
-}
-
-$conn->set_charset("utf8mb4");
-
-// garantir token CSRF para ações administrativas
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+require_once __DIR__ . '/../includes/admin_init.php';
 
 // Tratar ações via POST (mais seguro)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $posted = $_POST['csrf_token'] ?? '';
-    if (empty($posted) || !hash_equals($_SESSION['csrf_token'], $posted)) {
+    if (empty($posted) || !verify_csrf($posted)) {
         header('HTTP/1.1 400 Bad Request');
         die('Token CSRF inválido');
     }
@@ -40,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("UPDATE reservas SET estado='Aprovada' WHERE id=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        header("Location: dashboard_reserva.php"); exit();
+        header("Location: dashboard_reserva.php");
+        exit();
     }
 
     if (isset($_POST['cancelar'])) {
@@ -48,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("UPDATE reservas SET estado='Cancelada' WHERE id=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        header("Location: dashboard_reserva.php"); exit();
+        header("Location: dashboard_reserva.php");
+        exit();
     }
 
     if (isset($_POST['excluir'])) {
@@ -56,127 +32,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("DELETE FROM reservas WHERE id=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        header("Location: dashboard_reserva.php"); exit();
+        header("Location: dashboard_reserva.php");
+        exit();
     }
-}
 
-/* =========================
-   APROVAR
-========================= */
+    if (isset($_POST['editar_reserva'])) {
+        $id            = intval($_POST['id']);
+        $nome          = trim($_POST['nome']);
+        $telefone      = trim($_POST['telefone']);
+        $num_pessoa    = intval($_POST['num_pessoa']);
+        $mesa          = trim($_POST['mesa']);
+        $data_reserva  = $_POST['data_reserva'];
+        $hora_reserva  = $_POST['hora_reserva'];
+        $estado        = trim($_POST['estado']);
 
-if (isset($_GET['aprovar'])) {
-
-    $id = intval($_GET['aprovar']);
-
-    $stmt = $conn->prepare("
-        UPDATE reservas
-        SET estado='Aprovada'
-        WHERE id=?
-    ");
-
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-
-    header("Location: dashboard_reserva.php");
-    exit();
-}
-
-/* =========================
-   CANCELAR
-========================= */
-
-if (isset($_GET['cancelar'])) {
-
-    $id = intval($_GET['cancelar']);
-
-    $stmt = $conn->prepare("
-        UPDATE reservas
-        SET estado='Cancelada'
-        WHERE id=?
-    ");
-
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-
-    header("Location: dashboard_reserva.php");
-    exit();
-}
-
-/* =========================
-   EXCLUIR
-========================= */
-
-if (isset($_GET['excluir'])) {
-
-    $id = intval($_GET['excluir']);
-
-    $stmt = $conn->prepare("
-        DELETE FROM reservas
-        WHERE id=?
-    ");
-
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-
-    header("Location: dashboard_reserva.php");
-    exit();
-}
-
-/* =========================
-   EDITAR RESERVA
-========================= */
-
-if (isset($_POST['editar_reserva'])) {
-
-    $id            = intval($_POST['id']);
-    $nome          = trim($_POST['nome']);
-    $telefone      = trim($_POST['telefone']);
-    $num_pessoa    = intval($_POST['num_pessoa']);
-    $mesa          = trim($_POST['mesa']);
-    $data_reserva  = $_POST['data_reserva'];
-    $hora_reserva  = $_POST['hora_reserva'];
-    $estado        = trim($_POST['estado']);
-
-    $stmt = $conn->prepare("
-        UPDATE reservas
-        SET 
-            nome=?,
-            telefone=?,
-            num_pessoa=?,
-            mesa=?,
-            data_reserva=?,
-            hora_reserva=?,
-            estado=?
-        WHERE id=?
-    ");
-
-    $stmt->bind_param(
-        "ssissssi",
-        $nome,
-        $telefone,
-        $num_pessoa,
-        $mesa,
-        $data_reserva,
-        $hora_reserva,
-        $estado,
-        $id
-    );
-
-    $stmt->execute();
-
-    header("Location: dashboard_reserva.php");
-    exit();
+        $stmt = $conn->prepare("UPDATE reservas SET nome=?, telefone=?, num_pessoa=?, mesa=?, data_reserva=?, hora_reserva=?, estado=? WHERE id=?");
+        $stmt->bind_param("ssissssi", $nome, $telefone, $num_pessoa, $mesa, $data_reserva, $hora_reserva, $estado, $id);
+        $stmt->execute();
+        header("Location: dashboard_reserva.php");
+        exit();
+    }
 }
 
 /* =========================
    LISTAR
 ========================= */
 
-$reservas = $conn->query("
-    SELECT *
-    FROM reservas
-    ORDER BY id DESC
-");
+$reservas = $conn->query("SELECT * FROM reservas ORDER BY id DESC");
 ?>
 
 <!DOCTYPE html>
@@ -191,6 +73,7 @@ content="width=device-width, initial-scale=1.0">
 <title>Reservas</title>
 
 <link rel="stylesheet" href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 
@@ -572,6 +455,7 @@ td{
 
         <form method="POST">
 
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
             <input type="hidden" name="id" id="id">
 
             <div class="form-grid">

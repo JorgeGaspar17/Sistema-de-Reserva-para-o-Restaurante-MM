@@ -93,7 +93,7 @@ $token = $_SESSION['csrf_token'];
             </div>
 
             <div style="display:flex;gap:12px;margin-top:18px;">
-                <button type="button" class="btn-voltar" onclick="window.location.href='index.html'">Voltar</button>
+                <button type="button" class="btn-voltar" onclick="window.location.href='../index.html'">Voltar</button>
                 <button type="submit" class="btn-enviar">Reservar</button>
             </div>
 
