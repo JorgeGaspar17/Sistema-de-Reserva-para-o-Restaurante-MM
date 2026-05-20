@@ -1,5 +1,5 @@
 <?php
-include ("../s_reserva/restaurante.php");
+include ("../restaurante.php");
 // garantir sessão para token CSRF
 if (session_status() === PHP_SESSION_NONE) session_start();
 

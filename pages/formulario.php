@@ -28,9 +28,9 @@ $token = $_SESSION['csrf_token'];
 
     <nav>
         <ul class="nav-links">
-            <li><a href="index.html">Início</a></li>
-            <li><a href="../pages/cardapio.html">Cardápio</a></li>
-            <li><a href="../pages/sobre.html">Sobre</a></li>
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="cardapio.html">Cardápio</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
         </ul>
     </nav>
 

@@ -7,6 +7,7 @@
     <title>Gastronomia de Alta Classe</title>
 
     <link rel="stylesheet" href="../assets/css/gastronomia.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
@@ -21,10 +22,94 @@
 
         <ul class="nav-links">
             <li><a href="../index.html"><span class="nav-icon"><i class="fa-solid fa-house"></i></span> Início</a></li>
-            <li><a href="../pages/cardapio.html"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span> Cardápio</a></li>
-            <li><a href="../pages/Sobre.html"><span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> Sobre</a></li>
+            <li><a href="cardapio.html"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span> Cardápio</a></li>
+            <li><a href="sobre.html"><span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> Sobre</a></li>
+            <li><a href="#" id="openReservaModal"><span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span> Reservar</a></li>
         </ul>
     </nav>
+
+    <!-- MODAL RESERVA -->
+    <div class="modal" id="reservaModal" aria-hidden="true" role="dialog" aria-labelledby="reservaTitle" data-csrf-url="../pages/csrf_token.php">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="closeReservaModal" aria-label="Fechar janela"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="reservaTitle">Reserva rápida</h2>
+            <p class="modal-subtitle">Preencha seus dados para reservar e acompanhe pelo código.</p>
+
+            <form action="../admin/reservas.php" method="POST" id="modalReservaForm" class="modal-form" autocomplete="off">
+                <input type="hidden" name="csrf_token" id="csrf_token" value="" data-csrf-url="../pages/csrf_token.php">
+                <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off">
+
+                <div class="grid-2">
+                    <div>
+                        <label for="modal_nome">Nome Completo</label>
+                        <input type="text" id="modal_nome" name="nome" placeholder="Nome Completo" required>
+                    </div>
+                    <div>
+                        <label for="modal_num_pessoa">Nº Pessoas</label>
+                        <input type="number" id="modal_num_pessoa" name="num_pessoa" placeholder="1-10" min="1" max="10" required>
+                    </div>
+                </div>
+
+                <div class="field-inline">
+                    <div style="flex:1">
+                        <label for="modal_email">E-mail (opcional)</label>
+                        <input type="email" id="modal_email" name="email" placeholder="E-mail">
+                    </div>
+                    <div style="flex:1">
+                        <label for="modal_telefone">Telefone (opcional)</label>
+                        <input type="tel" id="modal_telefone" name="telefone" placeholder="Telefone">
+                    </div>
+                </div>
+
+                <p class="note">Informe pelo menos um contato: e-mail ou telefone.</p>
+
+                <div class="grid-2">
+                    <div>
+                        <label for="modal_data_reserva">Data</label>
+                        <input type="date" id="modal_data_reserva" name="data_reserva" required>
+                    </div>
+                    <div>
+                        <label for="modal_hora_reserva">Hora</label>
+                        <input type="time" id="modal_hora_reserva" name="hora_reserva" min="08:00" max="22:00" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modal_mesa">Mesa</label>
+                    <select name="mesa" id="modal_mesa" required>
+                        <option value="">Selecionar Mesa</option>
+                        <option value="1">Mesa 1</option>
+                        <option value="2">Mesa 2</option>
+                        <option value="3">Mesa 3</option>
+                        <option value="4">Mesa 4</option>
+                        <option value="5">Mesa 5</option>
+                    </select>
+                </div>
+
+                <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap;">
+                    <button type="button" class="btn-voltar" id="cancelReservaModal">Cancelar</button>
+                    <button type="submit" class="btn-enviar">Reservar</button>
+                </div>
+            </form>
+
+            <hr>
+
+            <h3>Ver Reserva</h3>
+            <form action="../admin/ver_reserva.php" method="GET" class="modal-form" style="margin-top:12px;">
+                <div class="grid-2">
+                    <input type="text" name="codigo_reserva" placeholder="Código da reserva">
+                    <input type="email" name="email" placeholder="E-mail">
+                </div>
+                <div style="margin-top:8px">
+                    <input type="tel" name="telefone" placeholder="Telefone">
+                </div>
+                <div class="buttons" style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap;">
+                    <button type="submit" class="btn-enviar">Verificar Reserva</button>
+                    <button type="button" class="btn-voltar" id="closeVerifyModal">Fechar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <br><br><br>
 
@@ -97,6 +182,7 @@
         </div>
     </footer>
     <script src="../javascript/gerente.js"></script>
+    <script src="../javascript/reserva-modal.js"></script>
 </body>
 
 </html>

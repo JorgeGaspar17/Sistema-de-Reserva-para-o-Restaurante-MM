@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurante MM</title>
 
-    <link rel="stylesheet" href="../s_reserva/assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
@@ -14,14 +15,14 @@
 <!-- NAVBAR -->
 <nav>
     <div class="logo-container">
-        <img src="../s_reserva/img/menu/IMG-20260217-WA0002.jpg" class="img">
+        <img src="img/menu/IMG-20260217-WA0002.jpg" class="img">
         <h1>Restaurante MM</h1>
     </div>
 
     <ul class="nav-links">
         <li><a href="index.html"><span class="nav-icon"><i class="fa-solid fa-house"></i></span> Início</a></li>
-        <li><a href="../s_reserva/pages/cardapio.html"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span> Cardápio</a></li>
-        <li><a href="../s_reserva/pages/sobre.html"><span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> Sobre</a></li>
+        <li><a href="pages/cardapio.html"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span> Cardápio</a></li>
+        <li><a href="pages/sobre.html"><span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> Sobre</a></li>
     </ul>
 </nav>
 
@@ -44,8 +45,8 @@
         <h2 id="reservaTitle">Reserva rápida</h2>
         <p class="modal-subtitle">Preencha seus dados para reservar e acompanhe pelo código.</p>
 
-        <form action="../s_reserva/admin/reservas.php" method="POST" id="modalReservaForm" class="modal-form" autocomplete="off">
-            <input type="hidden" name="csrf_token" id="csrf_token" value="">
+        <form action="admin/reservas.php" method="POST" id="modalReservaForm" class="modal-form" autocomplete="off">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="" data-csrf-url="pages/csrf_token.php">
             <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off">
 
             <div class="grid-2">
@@ -104,7 +105,7 @@
         <hr>
 
         <h3>Ver Reserva</h3>
-        <form action="../s_reserva/admin/ver_reserva.php" method="GET" class="modal-form" style="margin-top:12px;">
+        <form action="admin/ver_reserva.php" method="GET" class="modal-form" style="margin-top:12px;">
             <div class="grid-2">
                 <input type="text" name="codigo_reserva" placeholder="Código da reserva">
                 <input type="email" name="email" placeholder="E-mail">
@@ -126,14 +127,14 @@
     <!-- AMBIENTES EXCLUSIVOS -->
     <div class="category-card">
 
-        <img src="../s_reserva/img/galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg">
+        <img src="img/galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg">
 
         <div class="category-info">
             <h3>▤ Ambientes Exclusivos</h3>
 
             <p>Salão elegante e ambiente climatizado para momentos especiais.</p>
 
-            <a href="../s_reserva/pages/ambiente.html" class="mini-btn">
+            <a href="pages/ambiente.html" class="mini-btn">
                 Ver mais →
             </a>
         </div>
@@ -143,14 +144,14 @@
     <!-- ALTA GASTRONOMIA -->
     <div class="category-card">
 
-        <img src="../s_reserva/img/comidaMM/IMG-20260217-WA0004.jpg">
+        <img src="img/comidaMM/IMG-20260217-WA0004.jpg">
 
         <div class="category-info">
             <h3>▦ Alta Gastronomia</h3>
 
             <p>Pratos sofisticados preparados por chefs profissionais.</p>
 
-            <a href="../s_reserva/pages/gastronomia.html" class="mini-btn">
+            <a href="pages/gastronomia.html" class="mini-btn">
                 Ver mais →
             </a>
         </div>
@@ -164,11 +165,11 @@
 
     <div class="comboio-container">
         <div class="comboio-faixa">
-            <img src="../s_reserva/img/galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg">
-            <img src="../s_reserva/img/galeria/27867d78-b7e3-4402-a09d-86ecd639f633.jpg">
-            <img src="../s_reserva/img/galeria/7af3dc20-5b73-4b53-b83a-d485df2a1cec.jpg">
-            <img src="../s_reserva/img/galeria/baixados.jpg">
-            <img src="../s_reserva/img/galeria/mm.jpg">
+            <img src="img/galeria/1d555868-b136-4fd9-badd-256a04c312cc.jpg">
+            <img src="img/galeria/27867d78-b7e3-4402-a09d-86ecd639f633.jpg">
+            <img src="img/galeria/7af3dc20-5b73-4b53-b83a-d485df2a1cec.jpg">
+            <img src="img/galeria/baixados.jpg">
+            <img src="img/galeria/mm.jpg">
         </div>
     </div>
 </section>
@@ -202,51 +203,6 @@
     </div>
 </footer>
 
-<script>
-    const reservaModal = document.getElementById('reservaModal');
-    const openReservaModal = document.getElementById('openReservaModal');
-    const closeReservaModal = document.getElementById('closeReservaModal');
-    const cancelReservaModal = document.getElementById('cancelReservaModal');
-    const closeVerifyModal = document.getElementById('closeVerifyModal');
-    const tokenInput = document.getElementById('csrf_token');
-
-    async function loadCsrfToken() {
-        try {
-            const response = await fetch('../s_reserva/pages/csrf_token.php');
-            if (!response.ok) throw new Error('Não foi possível obter token');
-            const data = await response.json();
-            tokenInput.value = data.csrf_token;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    function openModal() {
-        reservaModal.classList.add('visible');
-        reservaModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        loadCsrfToken();
-    }
-
-    function closeModal() {
-        reservaModal.classList.remove('visible');
-        reservaModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    }
-
-    openReservaModal.addEventListener('click', openModal);
-    closeReservaModal.addEventListener('click', closeModal);
-    cancelReservaModal.addEventListener('click', closeModal);
-    closeVerifyModal.addEventListener('click', closeModal);
-    reservaModal.addEventListener('click', event => {
-        if (event.target === reservaModal) closeModal();
-    });
-    window.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && reservaModal.classList.contains('visible')) {
-            closeModal();
-        }
-    });
-</script>
-
+    <script src="javascript/reserva-modal.js"></script>
 </body>
 </html>
